@@ -1,3 +1,13 @@
+# Description:
+#   Create hangouts with Hubot.
+#
+# Commands:
+#   hubot hangout me <title> - Creates a Hangout with the given title and returns the URL.
+#
+# Configuration:
+#   HUBOT_GOOGLE_HANGOUTS_DOMAIN: Google Apps domain used as a scope for
+#   generating hangout URLs.
+
 module.exports = (robot) ->
 
   welcomeMsg = process.env.HUBOT_WELCOME_MESSAGE or "Hey {USER}, welcome to our AIE Chatbot. What are you looking for today?"
