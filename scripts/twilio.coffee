@@ -1,26 +1,35 @@
 # Description:
-#   Create hangouts with Hubot.
+#   It will allow you to send SMS and Automated Voice Call.
+#
+# Configurations:
+#   HUBOT_TWILIO_SID
+#   HUBOT_TWILIO_TOKEN
+#   HUBOT_TWILIO_NUMFROM
+#   HUBOT_TWILIO_TWIML
 #
 # Commands:
-#   hubot hangout me <title> - Creates a Hangout with the given title and returns the URL.
+#   hubot check my last sms - Response with last sms.
+#   hubot sendSMS (+xxxxxxxxxxxx) <Message> - Send an SMS to provided "+2<country code>10<mobile number>" digit number .
+#   hubot CallTo (+xxxxxxxxxxxx) - Make a Call to provided "+2<country code>10<mobile number>" digit number.
 #
-# Configuration:
-#   HUBOT_GOOGLE_HANGOUTS_DOMAIN: Google Apps domain used as a scope for
-#   generating hangout URLs.
+# Author:
+#   Prakash Rajendran (prakash.rajendran@capgemini.com)
+#
 
 env = process.env
 
-HUBOT_TWILIO_SID = 'ACc9972b73feffc9b4be2dd33b1ded86aa'
-HUBOT_TWILIO_TOKEN = 'a1fe075f96f884eeff6a8c704b979aa7'
-HUBOT_TWILIO_NUMFROM = '+12565300135'
-HUBOT_TWILIO_TWIML = 'http://demo.twilio.com/docs/voice.xml'
+sid = env.HUBOT_TWILIO_SID or 'ACc9972b73feffc9b4be2dd33b1ded86aa'
+token = env.HUBOT_TWILIO_TOKEN or 'a1fe075f96f884eeff6a8c704b979aa7'
+from = env.HUBOT_TWILIO_NUMFROM or '+12565300135'
+twiml = env.HUBOT_TWILIO_TWIML or 'http://demo.twilio.com/docs/voice.xml'
 
-twilio = require('twilio')(HUBOT_TWILIO_SID, HUBOT_TWILIO_TOKEN)
+twilio = require('twilio')(sid, token)
 
 module.exports = (robot) ->
 
   robot.respond /Check my last SMS/i, (msg) ->
 
+    console.log from
     twilio.messages.list {}, (err, data) ->
       anArrSMS = data.messages
       if anArrSMS.length < 0
@@ -38,11 +47,9 @@ module.exports = (robot) ->
     fnMakeCall(msg, callTo)
 
   robot.respond /sendSMS ?([+][0-9]{12}\b)? (.*)$/i, (msg) ->
-    TwilioAPICall = msg.match[0]
     sendTo = msg.match[1]
-    console.log sendTo
     if sendTo == undefined
-      msg.send 'Opps!! Number OR Message is missing - sendSMS (+xxxxxxxxxxxx) Message'
+      msg.send 'Opps!! Number/Message is missing - sendSMS (+xxxxxxxxxxxx) Message'
       return
     smsBody = msg.match[2]
     fnSendSMS(msg, sendTo, smsBody)
@@ -50,7 +57,7 @@ module.exports = (robot) ->
 fnSendSMS = (msg, sendTo, smsBody) ->
   twilio.messages.create {
     to: "#{sendTo}"
-    from: "#{HUBOT_TWILIO_NUMFROM}"
+    from: "#{from}"
     body: "#{smsBody}"
   }, (err, message) ->
     try
@@ -63,8 +70,8 @@ fnSendSMS = (msg, sendTo, smsBody) ->
 fnMakeCall = (msg, callTo) ->
   twilio.calls.create {
     to: "#{callTo}"
-    from: "#{HUBOT_TWILIO_NUMFROM}"
-    url: "#{HUBOT_TWILIO_TWIML}"
+    from: "#{from}"
+    url: "#{twiml}"
   }, (err, call) ->
     try
       if call.sid != undefined
