@@ -2,5 +2,7 @@
 "spotify",
 "twilio",
 "welcome",
-"google-hangouts"
+"google-hangouts",
+"sentiment",
+"personalityInsight"
 ]

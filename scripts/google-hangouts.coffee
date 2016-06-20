@@ -11,13 +11,17 @@
 env = process.env
 #env.HUBOT_GOOGLE_HANGOUTS_DOMAIN = '+dzone'
 
-hangoutsDomain = if env.HUBOT_GOOGLE_HANGOUTS_DOMAIN then '/' + env.HUBOT_GOOGLE_HANGOUTS_DOMAIN else ''
+#hangoutsDomain = if env.HUBOT_GOOGLE_HANGOUTS_DOMAIN then '/' + env.HUBOT_GOOGLE_HANGOUTS_DOMAIN else ''
 
 module.exports = (robot) ->
   robot.respond /hangouts?( me)?\s*"?(.*?)"?$/i, (msg) ->
 
-    console.log msg.match
-    console.log msg.message.user
+    #console.log msg.match
+    #console.log msg.message.user
     title = "#{msg.match[2] || msg.message.user.name}-#{+new Date()}"
+    console.log title
     slug  = title.replace(/[^0-9a-z-]+/gi, '-')
-    msg.send "I've started a Hangout! Join here: https://plus.google.com/hangouts/_/#{hangoutsDomain}/#{slug}"
+    #msg.send "I've started a Hangout! Join here: https://plus.google.com/hangouts/_/#{hangoutsDomain}/#{slug}"
+    #msg.send "I've started a Hangout! Join here: https://hangouts.google.com/call/#{hangoutsDomain}/#{slug}"
+    #msg.send "I've started a Hangout! Join here: https://g.co/hangouts"
+    msg.send "I've started a Hangout! Join here: https://hangouts.google.com/hangouts/_/"

@@ -1,30 +1,33 @@
 # Description:
-#   Create hangouts with Hubot.
+#   General and private greet message to the newly joined user.
 #
 # Commands:
-#   hubot hangout me <title> - Creates a Hangout with the given title and returns the URL.
+#   None
 #
 # Configuration:
-#   HUBOT_GOOGLE_HANGOUTS_DOMAIN: Google Apps domain used as a scope for
-#   generating hangout URLs.
+#   None
+#
+# Author:
+#   Prakash Rajendran (prakash.rajendran@capgemini.com)
+#
 
 module.exports = (robot) ->
 
-  welcomeMsg = process.env.HUBOT_WELCOME_MESSAGE or "Hey {USER}, welcome to our AIE Chatbot. What are you looking for today?"
+  welcomeMsg = process.env.HUBOT_WELCOME_MESSAGE or "Hey {USER}, welcome to Capgemini AIE Chatbot. What are you looking for today?"
 
   robot.enter (res) ->
     userName = res.message.user.name
     res.send welcomeMsg.replace "{USER}",userName
     robot.send {room: userName},
-      """Hi there, I'm Aiemee! Welcome to our AIE Chatbot.
-      Here's how i work - you can direct message me the word "Aiemee help" to get to know all my services,
+      """Hi there, I'm Aiemee! Welcome to Capgemini AIE Chatbot.
+      Here's how i work - you can directly message me the word "Aiemee help" to get to know all my services,
       Sample
         1. Aiemee Ping - Respond with Pong
         2. Aiemee Weather in <place> - Display the weather in <place>
         3. Aiemee seriously guys - Display a serious guies GIF image
-        4. Aiemee Lunchtime near <city>
+        4. Aiemee Lunchtime near <city> - Response with nearby hotel
       """
 
   robot.leave (res) ->
     userName = res.message.user.name
-    res.send "User #{userName} left the AIE Chatbot"
+    res.send "User #{userName} left the Capgemini AIE Chatbot"
