@@ -5,14 +5,14 @@
 #   twitter installed
 #
 # Configuration:
-#   HUBOT_TWITTER_CONSUMER_KEY
-#   HUBOT_TWITTER_CONSUMER_SECRET
-#   HUBOT_TWITTER_ACCESS_TOKEN
-#   HUBOT_TWITTER_ACCESS_TOKEN_SECRET
-#   HUBOT_TWITTER_RESPONSE_COUNT
+#   TWITTER_CONSUMER_KEY
+#   TWITTER_CONSUMER_SECRET
+#   TWITTER_ACCESS_TOKEN_KEY
+#   TWITTER_ACCESS_TOKEN_SECRET
+#   TWITTER_RESPONSE_COUNT
 #
 # Commands:
-#   hubot twitter search <query> - Search public tweets
+#   hubot twitter search <hashtag> - Search public tweets. <query> - #AIE #Capgemini
 #
 # Author:
 #  Prakash Rajendran (prakash.rajendran@capgemini.com)
@@ -22,13 +22,11 @@ Twitter = require('twitter');
 
 env = process.env
 
-env.HUBOT_TWITTER_RESPONSE_COUNT = '5'
-
 twit = new Twitter({
-  consumer_key: env.HUBOT_TWITTER_CONSUMER_KEY,
-  consumer_secret: env.HUBOT_TWITTER_CONSUMER_SECRET,
-  access_token_key: env.HUBOT_TWITTER_ACCESS_TOKEN,
-  access_token_secret: env.HUBOT_TWITTER_ACCESS_TOKEN_SECRET
+  consumer_key: env.TWITTER_CONSUMER_KEY,
+  consumer_secret: env.TWITTER_CONSUMER_SECRET,
+  access_token_key: env.TWITTER_ACCESS_TOKEN_KEY,
+  access_token_secret: env.TWITTER_ACCESS_TOKEN_SECRET
 });
 
 doSearch = (msg) ->
@@ -36,7 +34,7 @@ doSearch = (msg) ->
   query = msg.match[1].replace(' #','+#')
   return if !query
 
-  count = env.HUBOT_TWITTER_RESPONSE_COUNT
+  count = env.TWITTER_RESPONSE_COUNT
   searchConfig =
     q: "#{query}",
     count: count,
@@ -51,7 +49,7 @@ doSearch = (msg) ->
     response = ''
     i = 0
     for status, i in statuses
-	
+
       msg.send "@#{status.user.screen_name} -- : #{status.text}"
       if status.entities.media != undefined
         media_url = "\n"+status.entities.media[0].media_url
@@ -60,17 +58,17 @@ doSearch = (msg) ->
 
 module.exports = (robot) ->
   robot.respond /twitter search (.*)$/i, (msg) ->
-    unless env.HUBOT_TWITTER_CONSUMER_KEY
-      msg.send "Please set the HUBOT_TWITTER_CONSUMER_KEY environment variable."
+    unless env.TWITTER_CONSUMER_KEY
+      msg.send "Please set the TWITTER_CONSUMER_KEY environment variable."
       return
-    unless env.HUBOT_TWITTER_CONSUMER_SECRET
-      msg.send "Please set the HUBOT_TWITTER_CONSUMER_SECRET environment variable."
+    unless env.TWITTER_CONSUMER_SECRET
+      msg.send "Please set the TWITTER_CONSUMER_SECRET environment variable."
       return
-    unless env.HUBOT_TWITTER_ACCESS_TOKEN
-      msg.send "Please set the HUBOT_TWITTER_ACCESS_TOKEN environment variable."
+    unless env.TWITTER_ACCESS_TOKEN_KEY
+      msg.send "Please set the TWITTER_ACCESS_TOKEN_KEY environment variable."
       return
-    unless env.HUBOT_TWITTER_ACCESS_TOKEN_SECRET
-      msg.send "Please set the HUBOT_TWITTER_ACCESS_TOKEN_SECRET environment variable."
+    unless env.TWITTER_ACCESS_TOKEN_SECRET
+      msg.send "Please set the TWITTER_ACCESS_TOKEN_SECRET environment variable."
       return
 
     doSearch(msg)
